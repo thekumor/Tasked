@@ -1,3 +1,43 @@
 html {
 	background-color: white;
+	font-family: "Lora", serif;
+}
+
+#task-table {
+	margin: 0 auto;
+	text-align: center;
+	border: 2px solid black;
+	width: 33%;
+}
+
+.task-card {
+	background-color: beige;
+	border: 2px solid black;
+	margin: 0 auto;
+	margin-bottom: 2vh;
+	padding: 1vh;
+	width: 50%;
+}
+
+.task-subcard {
+	background-color: beige;
+	border: 1px dotted black;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+	padding: 0.5vh;
+}
+
+.footer {
+	background-color: #aeaeae;
+	border-top: 2px solid black;
+	position: fixed;
+	width: 100%;
+	text-align: center;
+	padding: 1.5vh;
+	bottom: 0;
+}
+
+.welcome {
+	text-align: center;
+	margin-top: 50px;
 }
