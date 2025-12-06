@@ -1,6 +1,14 @@
 html {
-	background-color: white;
+	background-image: url("img/background/1337140.png");
+	background-size: 100%;
+	background-attachment: fixed;
+	/* background-color: white; */
 	font-family: "Lora", serif;
+	color: white;
+}
+
+a {
+	color: lightblue;
 }
 
 #task-table {
@@ -11,7 +19,7 @@ html {
 }
 
 .task-card {
-	background-color: beige;
+	background-color: brown;
 	border: 2px solid black;
 	margin: 0 auto;
 	margin-bottom: 2vh;
@@ -19,8 +27,12 @@ html {
 	width: 50%;
 }
 
+.task-card:hover{
+	cursor: pointer;
+}
+
 .task-subcard {
-	background-color: beige;
+	background-color: brown;
 	border: 1px dotted black;
 	margin-top: 1vh;
 	margin-bottom: 1vh;
@@ -28,7 +40,7 @@ html {
 }
 
 .footer {
-	background-color: #aeaeae;
+	background-color: rgb(58, 58, 58);
 	border-top: 2px solid black;
 	position: fixed;
 	width: 100%;
@@ -37,7 +49,20 @@ html {
 	bottom: 0;
 }
 
+.side {
+	position: fixed;
+	width: 15%;
+	background-color: rgb(58, 58, 58);
+	border: 2px solid black;
+	padding-left: 3vh;
+	margin-left: 3vh;
+}
+
 .welcome {
 	text-align: center;
 	margin-top: 50px;
+}
+
+.footer-padding {
+	padding-top: 12vh;
 }
