@@ -1,3 +1,11 @@
+// ================================================
+// 
+//	Script: tasks.js
+//	Contains all data about tasks and their values.
+//	by The Kumor
+// 
+// ================================================
+
 var tasks = {};
 
 tasks["Coffee"] = {
@@ -155,7 +163,7 @@ for (var key in tasks) {
 }
 
 var checkedPoints = 0;
-function fillCard(parent, task, starValue) {
+function FillCard(parent, task, starValue) {
 	var stars = "";
 	for (var i = 0; i < starValue || 0; i++)
 		stars += "⭐";
@@ -197,7 +205,7 @@ function fillCard(parent, task, starValue) {
 	});
 }
 
-function popoulateTable() {
+function PopoulateTable() {
 	console.log("Populating table...");
 
 	for (var key in tasks) {
@@ -217,7 +225,7 @@ function popoulateTable() {
 			}
 		});
 
-		fillCard(parent, task, stars[key].value);
+		FillCard(parent, task, stars[key].value);
 
 		for (var subkey in task.subtasks || {}) {
 			var subtask = task.subtasks[subkey];
@@ -225,12 +233,12 @@ function popoulateTable() {
 			var subparent = document.createElement("div");
 			subparent.className = "task-subcard";
 			parent.appendChild(subparent);
-			fillCard(subparent, subtask, stars[key].subtasks[subkey].value);
+			FillCard(subparent, subtask, stars[key].subtasks[subkey].value);
 		}
 	}
 }
 
-function createFooter() {
+function CreateFooter() {
 	var footer = document.createElement("div");
 	footer.className = "footer";
 	document.body.appendChild(footer);
@@ -265,7 +273,7 @@ function createFooter() {
 	document.body.appendChild(footerPadding);
 }
 
-function ready() {
-	popoulateTable();
-	createFooter();
+function Ready() {
+	PopoulateTable();
+	CreateFooter();
 }

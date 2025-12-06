@@ -6,6 +6,10 @@
 -- 
 ---------------------------------------------------->
 
+<?php
+include("database.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +19,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	<!-- This may not work. -->
+	<!-- This may not work -->
 	<meta http-equiv="Cache-Control" content="no-store" />
 
 	<!-- Google Fonts -->
@@ -36,10 +40,11 @@
 	<div class="side">
 		<h2>Navigation</h2>
 		<ul>
-			<li><a href="#">Home</a></li>
-			<li><a href="#">Tasks</a></li>
-			<li><a href="#">Settings</a></li>
+			<li><a href="index.html">Tasks</a></li>
+			<li><a href="saved.html">Database</a></li>
 		</ul>
 	</div>
+
+	<!-- Footer is created from tasks.js -->
 </body>
 </html>
