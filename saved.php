@@ -16,9 +16,10 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="database.js"></script>
 </head>
 
-<body onload="ready()">
+<body onload="Ready()">
 	<div class="welcome">
 		<h1>Database</h1>
 		<p>Days saved to database:</p>
@@ -28,8 +29,8 @@
 	<div class="side">
 		<h2>Navigation</h2>
 		<ul>
-			<li><a href="index.html">Tasks</a></li>
-			<li><a href="saved.html">Database</a></li>
+			<li><a href="index.php">Tasks</a></li>
+			<li><a href="saved.php">Database</a></li>
 		</ul>
 	</div>
 </body>

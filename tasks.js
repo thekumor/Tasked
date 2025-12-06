@@ -163,6 +163,7 @@ for (var key in tasks) {
 }
 
 var checkedPoints = 0;
+var checkedTasks = [];
 function FillCard(parent, task, starValue) {
 	var stars = "";
 	for (var i = 0; i < starValue || 0; i++)
@@ -192,12 +193,16 @@ function FillCard(parent, task, starValue) {
 			console.log(task.display + " points added: " + task.value);
 			name.innerText = "[ ✅ ]" + stars + " " + task.display;
 			parent.style.backgroundColor = "rgba(109, 146, 109, 1)";
+
+			checkedTasks.push(task);
 		}
 		else {
 			checkedPoints -= task.value;
 			console.log(task.display + " points removed: " + task.value);
 			name.innerText = stars + " " + task.display;
 			parent.style.backgroundColor = "brown";
+
+			checkedTasks = checkedTasks.filter(t => t !== task);
 		}
 
 		var footerPoints = document.getElementById("points");
@@ -266,6 +271,22 @@ function CreateFooter() {
 	save.addEventListener("click", () => {
 		console.log("Requesting save...");
 		alert("Progress saved!");
+
+		fetch("database.php", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+			body: "date=" + encodeURIComponent(dateSelect.value) + "&tasks=" + JSON.stringify(checkedTasks) + "&action=save",
+		})
+		.then(response => response.text())
+		.then(data => {
+			console.log("Response from server: " + data);
+		})
+		.catch(error => {
+			console.error("Error:", error);
+		});
+
 	});
 
 	var footerPadding = document.createElement("div");

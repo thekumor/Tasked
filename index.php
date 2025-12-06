@@ -6,10 +6,6 @@
 -- 
 ---------------------------------------------------->
 
-<?php
-include("database.php");
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +27,7 @@ include("database.php");
 	<script type="text/javascript" src="tasks.js"></script>
 </head>
 
-<body onload="ready()">
+<body onload="Ready()">
 	<div class="welcome">
 		<h1>Welcome to Tasked</h1>
 		<p>Your task management solution.</p>
@@ -40,8 +36,8 @@ include("database.php");
 	<div class="side">
 		<h2>Navigation</h2>
 		<ul>
-			<li><a href="index.html">Tasks</a></li>
-			<li><a href="saved.html">Database</a></li>
+			<li><a href="index.php">Tasks</a></li>
+			<li><a href="saved.php">Database</a></li>
 		</ul>
 	</div>
 

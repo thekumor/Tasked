@@ -7,10 +7,33 @@
 // 
 // ================================================
 
+if (!isset($_POST["date"]) || !isset($_POST["tasks"]) || !isset($_POST["action"]))
+	die("Invalid request.");
+
 $config["host"] = "localhost";
 $config["user"] = "root";
 $config["pass"] = "";
 $config["name"] = "tasked";
+
+CreateDatabase();
+
+if ($_POST["action"] == "save") {
+	if (GetTasks($_POST["date"]) != null)
+		UpdateTasks($_POST["date"], $_POST["tasks"]);
+	else
+		SaveTasks($_POST["date"], $_POST["tasks"]);
+} else if ($_POST["action"] == "delete")
+	DeleteTasks($_POST["date"]);
+else if ($_POST["action"] == "get_dates"){
+	$dates = GetAllTasks(true);
+	echo json_encode($dates);
+}
+else if ($_POST["action"] == "get"){
+	$tasks = GetTasks($_POST["date"]);
+	echo json_encode($tasks);
+}
+else
+	die("Invalid action.");
 
 function Connect()
 {
@@ -51,7 +74,7 @@ function SaveTasks($date, $tasks)
 {
 	$mysqli = Connect();
 
-	$mysqli->query("CREATE TABLE IF NOT EXISTS day(date DATE, tasks BLOB);");
+	$mysqli->query("CREATE TABLE IF NOT EXISTS day(date DATE, tasks TEXT);");
 
 	$stmt = $mysqli->prepare("
 		INSERT INTO day(date, tasks)
@@ -106,14 +129,40 @@ function UpdateTasks($date, $tasks)
 	$mysqli->close();
 }
 
-function GetTasks()
+function GetTasks($date)
+{
+	$mysqli = Connect();
+	$task = null;
+
+	$stmt = $mysqli->prepare("
+		SELECT * FROM day
+		WHERE date = ?;
+	");
+	$stmt->bind_param(
+		"s",
+		$date
+	);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	if ($row = $result->fetch_assoc()) {
+		$task = $row;
+	}
+
+	$stmt->close();
+
+	$mysqli->close();
+
+	return $task;
+}
+
+function GetAllTasks($justDates = false)
 {
 	$mysqli = Connect();
 	$tasks = array();
 
-	$stmt = $mysqli->prepare("
-		SELECT * FROM day;
-	");
+	$query = $justDates ? "SELECT date FROM day" : "SELECT * FROM day";
+	$stmt = $mysqli->prepare($query);
 	$stmt->execute();
 	$result = $stmt->get_result();
 
