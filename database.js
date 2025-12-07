@@ -1,3 +1,11 @@
+// ================================================
+// 
+//	Script: database.js
+//	Reads tasks from the database and displays them.
+//	by The Kumor
+// 
+// ================================================
+
 function Ready() {
 	var taskDivs = [];
 
