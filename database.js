@@ -2,7 +2,7 @@ function Ready() {
 	var taskDivs = [];
 
 	var div = document.createElement("div");
-	div.className = "task-card";
+	div.className = "task-container";
 	document.body.appendChild(div);
 
 	var select = document.createElement("select");
@@ -13,6 +13,15 @@ function Ready() {
 	select.style.width = "100%";
 	select.addEventListener("change", (event) => {
 		var date = event.target.value;
+
+		if (date == "Select date") {
+			for (var i = 0; i < taskDivs.length; i++)
+				document.body.removeChild(taskDivs[i]);
+
+			taskDivs = [];
+
+			return;
+		}
 
 		fetch("database.php", {
 			method: "POST",
@@ -34,7 +43,7 @@ function Ready() {
 
 				for (var i = 0; i < tasks.tasks.length; i++) {
 					var taskDiv = document.createElement("div");
-					taskDiv.className = "task-card";
+					taskDiv.className = "task-container";
 					document.body.appendChild(taskDiv);
 					taskDivs.push(taskDiv);
 
@@ -64,10 +73,21 @@ function Ready() {
 		.then(data => {
 			var dates = JSON.parse(data);
 
-			for (var i = 0; i < dates.length; i++) {
+			var option = document.createElement("option");
+			option.value = "Select date";
+			option.innerText = "-- Select date ---";
+			select.appendChild(option);
+			option.selected = true;
+
+			var optionsAvailable = [];
+
+			for (var i = 0; i < dates.length; i++)
+				optionsAvailable.push(dates[i].date);
+
+			for (var i = optionsAvailable.length - 1; i >= 0; i--) {
 				var option = document.createElement("option");
-				option.value = dates[i].date;
-				option.innerText = dates[i].date;
+				option.value = optionsAvailable[i];
+				option.innerText = optionsAvailable[i];
 				select.appendChild(option);
 			}
 		})

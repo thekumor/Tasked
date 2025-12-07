@@ -39,6 +39,15 @@ a {
 	padding: 0.5vh;
 }
 
+.task-container {
+	background-color: rgb(58, 58, 58);
+	border: 2px solid black;
+	margin: 0 auto;
+	margin-bottom: 2vh;
+	padding: 1vh;
+	width: 50%;
+}
+
 .footer {
 	background-color: rgb(58, 58, 58);
 	border-top: 2px solid black;
