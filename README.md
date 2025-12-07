@@ -25,7 +25,7 @@ performed during that date.
 
 ## UI
 ![Saving tasks](img/github/UI.png)
-![Loading tasks](img/github/UI 2.png)
+![Loading tasks](img/github/UI2.png)
 
 ## Areas for Improvement
 It requires Apache and a database system. There should be version which doesn’t require them. It would use .html
