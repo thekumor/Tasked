@@ -15,7 +15,7 @@ $config["user"] = "root";
 $config["pass"] = "";
 $config["name"] = "tasked";
 
-CreateDatabase();
+CreateDatabaseIfNotExists();
 
 $callbacks = [
 	"save" => function () {
@@ -39,24 +39,6 @@ $callbacks = [
 		echo json_encode($tasks);
 	}
 ];
-
-// if ($_POST["action"] == "save") {
-// 	if (GetTasks($_POST["date"]) != null)
-// 		UpdateTasks($_POST["date"], $_POST["tasks"]);
-// 	else
-// 		SaveTasks($_POST["date"], $_POST["tasks"]);
-// } else if ($_POST["action"] == "delete")
-// 	DeleteTasks($_POST["date"]);
-// else if ($_POST["action"] == "get_dates"){
-// 	$dates = GetAllTasks(true);
-// 	echo json_encode($dates);
-// }
-// else if ($_POST["action"] == "get"){
-// 	$tasks = GetTasks($_POST["date"]);
-// 	echo json_encode($tasks);
-// }
-// else
-// 	die("Invalid action.");
 
 if (array_key_exists($_POST["action"], $callbacks)) {
 	$action = $callbacks[$_POST["action"]];
@@ -82,7 +64,7 @@ function Connect()
 	return $mysqli;
 }
 
-function CreateTable($mysqli)
+function CreateTableIfNotExists($mysqli)
 {
 	global $config;
 
@@ -90,7 +72,7 @@ function CreateTable($mysqli)
 	$mysqli->query("CREATE TABLE IF NOT EXISTS day(`date` DATE, tasks TEXT);");
 }
 
-function CreateDatabase()
+function CreateDatabaseIfNotExists()
 {
 	global $config;
 
@@ -104,7 +86,7 @@ function CreateDatabase()
 		die("Failed to connect to database (" . $mysqli->connect_error . ")");
 
 	$mysqli->query("CREATE DATABASE IF NOT EXISTS " . $config["name"] . ";");
-	CreateTable($mysqli);
+	CreateTableIfNotExists($mysqli);
 
 	$mysqli->close();
 }
@@ -113,7 +95,7 @@ function SaveTasks($date, $tasks)
 {
 	$mysqli = Connect();
 
-	CreateTable($mysqli);
+	CreateTableIfNotExists($mysqli);
 
 	$stmt = $mysqli->prepare("
 		INSERT INTO day(date, tasks)
@@ -173,7 +155,7 @@ function GetTasks($date)
 	$mysqli = Connect();
 	$task = null;
 
-	CreateTable($mysqli);
+	CreateTableIfNotExists($mysqli);
 
 	$stmt = $mysqli->prepare("
 		SELECT * FROM day
@@ -202,7 +184,7 @@ function GetAllTasks($justDates = false)
 	$mysqli = Connect();
 	$tasks = array();
 
-	CreateTable($mysqli);
+	CreateTableIfNotExists($mysqli);
 
 	$query = $justDates ? "SELECT date FROM day" : "SELECT * FROM day";
 	$stmt = $mysqli->prepare($query);

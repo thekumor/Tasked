@@ -67,6 +67,20 @@ a {
 	margin-left: 3vh;
 }
 
+.button {
+	background-color: gray;
+	border: 2px solid black;
+	margin: 0 auto;
+	display: block;
+	padding: 0.5vw;
+	width: 30%;
+}
+
+.button:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
 .welcome {
 	text-align: center;
 	margin-top: 50px;
