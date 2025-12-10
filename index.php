@@ -24,10 +24,10 @@
 	<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
 	<link rel="stylesheet" href="style.css">
-	<script type="text/javascript" src="tasks.js"></script>
+	<script type="module" src="tasks.js"></script>
 </head>
 
-<body onload="Ready()">
+<body>
 	<div class="welcome">
 		<h1>Welcome to Tasked</h1>
 		<p>Your task management solution.</p>
