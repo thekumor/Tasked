@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 // ================================================
 // 
 //	Script: database.js
@@ -34,7 +32,6 @@ function RemoveTask(date, dynamicElements, select) {
 	select.value = "Select date";
 }
 
->>>>>>> Stashed changes
 function Ready() {
 	var dynamicElements = [];
 
