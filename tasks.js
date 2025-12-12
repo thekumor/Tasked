@@ -1,90 +1,12 @@
 // ================================================
 // 
 //	Script: tasks.js
-//	Contains all data about tasks and their values.
+//	Handles task display and interaction.
 //	by The Kumor
 // 
 // ================================================
 
-var tasks = {};
-
-tasks["Coffee"] = {
-	display: "Drink coffee",
-	value: 5,
-	img: "img/coffee.png",
-};
-
-tasks["Walk the dog"] = {
-	display: "Walk the dog",
-	value: 7,
-	img: "img/dog.png",
-};
-
-tasks["Go fishing"] = {
-	display: "Go fishing",
-	value: 3,
-	img: "img/fish.png"
-};
-
-tasks["Study"] = {
-	display: "Study",
-	value: 8,
-	img: "img/study.png"
-};
-
-tasks["Grocery shopping"] = {
-	display: "Grocery shopping",
-	value: 4,
-	img: "img/grocery.png"
-};
-
-tasks["Exercise"] = {
-	display: "Exercise",
-	value: 6,
-	img: "img/exercise.png",
-
-	subtasks: {
-		cardio: {
-			display: "Cardio",
-			value: 3,
-		},
-		weights: {
-			display: "Weight training",
-			value: 3,
-		},
-		stretching: {
-			display: "Stretching",
-			value: 2,
-		}
-	}
-};
-
-tasks["Read a book"] = {
-	display: "Read a book",
-	value: 3,
-	img: "img/book.png"
-};
-
-tasks["Clean the house"] = {
-	display: "Clean the house",
-	value: 5,
-	img: "img/clean.png",
-
-	subtasks: {
-		vacuum: {
-			display: "Vacuuming",
-			value: 2,
-		},
-		dusting: {
-			display: "Dusting",
-			value: 2,
-		},
-		mopping: {
-			display: "Mopping",
-			value: 2,
-		}
-	}
-};
+import { tasks } from "./tasks_data.js";
 
 // Compute standard deviation
 var values = [];
@@ -164,7 +86,7 @@ for (var key in tasks) {
 
 var checkedPoints = 0;
 var checkedTasks = [];
-function FillCard(parent, task, starValue) {
+function FillCard(parent, key, task, starValue) {
 	var stars = "";
 	for (var i = 0; i < starValue || 0; i++)
 		stars += "⭐";
@@ -189,25 +111,115 @@ function FillCard(parent, task, starValue) {
 		var checked = event.target.checked;
 
 		if (checked) {
-			checkedPoints += task.value;
-			console.log(task.display + " points added: " + task.value);
 			name.innerText = "[ ✅ ]" + stars + " " + task.display;
 			parent.style.backgroundColor = "rgba(109, 146, 109, 1)";
 
-			checkedTasks.push(task);
+			if (task.custom === undefined) {
+				checkedPoints += task.value;
+				console.log(task.display + " points added: " + task.value)
+
+				checkedTasks.push(task);
+			}
+			else {
+				for (var customKey in task.custom) {
+					if (task.custom[customKey] == false) continue;
+
+					console.log("Including custom task in checked tasks: " + customKey);
+					checkedTasks.push(tasks[customKey]);
+					checkedPoints += tasks[customKey].value;
+				}
+			}
 		}
 		else {
-			checkedPoints -= task.value;
-			console.log(task.display + " points removed: " + task.value);
 			name.innerText = stars + " " + task.display;
 			parent.style.backgroundColor = "brown";
 
-			checkedTasks = checkedTasks.filter(t => t !== task);
+			if (task.custom === undefined) {
+				checkedPoints -= task.value;
+				console.log(task.display + " points removed: " + task.value);
+
+				checkedTasks = checkedTasks.filter(t => t !== task);
+			}
+			else {
+				for (var customKey in task.custom) {
+					if (task.custom[customKey] == false) continue;
+
+					console.log("Removing custom task from checked tasks: " + customKey);
+					checkedTasks = checkedTasks.filter(t => t !== tasks[customKey]);
+					checkedPoints -= tasks[customKey].value;
+				}
+			}
 		}
 
 		var footerPoints = document.getElementById("points");
 		footerPoints.innerText = "Total value: " + checkedPoints + " points\n";
 	});
+
+	if (task.custom !== undefined) {
+		var addCustom = document.createElement("button");
+		addCustom.innerText = "Add";
+		addCustom.style.float = "right";
+		parent.appendChild(addCustom);
+
+		addCustom.addEventListener("click", () => {
+			var customTaskName = prompt("Enter custom task name:");
+			var customKey = key + customTaskName;
+
+			if (customTaskName && !tasks[customKey]) {
+				tasks[customKey] = {
+					display: task.display + " " + customTaskName,
+					value: task.value,
+					img: task.img
+				};
+
+				task.custom[customKey] = true;
+
+				var customTaskInfo = document.createElement("span");
+				customTaskInfo.innerText = "\n----\n" + tasks[customKey].display + "\nValue: " + tasks[customKey].value + "\n----\n";
+				customTaskInfo.id = customKey;
+				parent.appendChild(customTaskInfo);
+
+				if (check.checked) {
+					checkedTasks.push(tasks[customKey]);
+					checkedPoints += tasks[customKey].value;
+
+					var footerPoints = document.getElementById("points");
+					footerPoints.innerText = "Total value: " + checkedPoints + " points\n";
+				}
+
+				console.log("Custom task added: " + customKey);
+			}
+		});
+
+		var removeCustom = document.createElement("button");
+		removeCustom.innerText = "Remove";
+		removeCustom.style.float = "right";
+		parent.appendChild(removeCustom);
+
+		removeCustom.addEventListener("click", () => {
+			var customTaskName = prompt("Enter custom task name to remove:");
+			var customKey = key + customTaskName;
+
+			if (customTaskName && tasks[customKey]) {
+				task.custom[customKey] = false;
+
+				var customTaskInfo = document.getElementById(customKey);
+				if (customTaskInfo) {
+					customTaskInfo.remove();
+				}
+
+				if (checkedTasks.includes(tasks[customKey])) {
+					checkedTasks = checkedTasks.filter(t => t !== tasks[customKey]);
+					checkedPoints -= tasks[customKey].value;
+
+					var footerPoints = document.getElementById("points");
+					footerPoints.innerText = "Total value: " + checkedPoints + " points\n";
+				}
+
+				console.log("Custom task removed: " + customKey);
+			}
+		});
+	}
 }
 
 function PopoulateTable() {
@@ -230,7 +242,7 @@ function PopoulateTable() {
 			}
 		});
 
-		FillCard(parent, task, stars[key].value);
+		FillCard(parent, key, task, stars[key].value);
 
 		for (var subkey in task.subtasks || {}) {
 			var subtask = task.subtasks[subkey];
@@ -238,7 +250,7 @@ function PopoulateTable() {
 			var subparent = document.createElement("div");
 			subparent.className = "task-subcard";
 			parent.appendChild(subparent);
-			FillCard(subparent, subtask, stars[key].subtasks[subkey].value);
+			FillCard(subparent, subkey, subtask, stars[key].subtasks[subkey].value);
 		}
 	}
 }
@@ -279,13 +291,13 @@ function CreateFooter() {
 			},
 			body: "date=" + encodeURIComponent(dateSelect.value) + "&tasks=" + JSON.stringify(checkedTasks) + "&action=save",
 		})
-		.then(response => response.text())
-		.then(data => {
-			console.log("Response from server: " + data);
-		})
-		.catch(error => {
-			console.error("Error:", error);
-		});
+			.then(response => response.text())
+			.then(data => {
+				console.log("Response from server: " + data);
+			})
+			.catch(error => {
+				console.error("Error:", error);
+			});
 
 	});
 
@@ -294,7 +306,7 @@ function CreateFooter() {
 	document.body.appendChild(footerPadding);
 }
 
-function Ready() {
-	PopoulateTable();
-	CreateFooter();
-}
+// function Ready() {
+PopoulateTable();
+CreateFooter();
+// }

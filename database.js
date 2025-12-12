@@ -6,8 +6,34 @@
 // 
 // ================================================
 
+function RemoveTask(date, dynamicElements, select) {
+	if (!confirm("Are you sure you want to clear all tasks for " + date + "?"))
+		return;
+
+	fetch("database.php", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+		},
+		body: "date=" + encodeURIComponent(date) + "&tasks=*&action=delete",
+	})
+		.then(response => response.text())
+		.then(data => {
+			alert("Tasks cleared for " + date + ".");
+			window.location.reload();
+		})
+		.catch(error => {
+			console.error("Error:", error);
+		});
+
+	for (var i = 0; i < dynamicElements.length; i++)
+		document.body.removeChild(dynamicElements[i]);
+	dynamicElements = [];
+	select.value = "Select date";
+}
+
 function Ready() {
-	var taskDivs = [];
+	var dynamicElements = [];
 
 	var div = document.createElement("div");
 	div.className = "task-container";
@@ -23,10 +49,10 @@ function Ready() {
 		var date = event.target.value;
 
 		if (date == "Select date") {
-			for (var i = 0; i < taskDivs.length; i++)
-				document.body.removeChild(taskDivs[i]);
+			for (var i = 0; i < dynamicElements.length; i++)
+				document.body.removeChild(dynamicElements[i]);
 
-			taskDivs = [];
+			dynamicElements = [];
 
 			return;
 		}
@@ -42,18 +68,17 @@ function Ready() {
 			.then(data => {
 				var tasks = JSON.parse(data);
 				tasks.tasks = JSON.parse(tasks.tasks);
-				console.log(tasks);
 
-				for (var i = 0; i < taskDivs.length; i++)
-					document.body.removeChild(taskDivs[i]);
+				for (var i = 0; i < dynamicElements.length; i++)
+					document.body.removeChild(dynamicElements[i]);
 
-				taskDivs = [];
+				dynamicElements = [];
 
 				for (var i = 0; i < tasks.tasks.length; i++) {
 					var taskDiv = document.createElement("div");
 					taskDiv.className = "task-container";
 					document.body.appendChild(taskDiv);
-					taskDivs.push(taskDiv);
+					dynamicElements.push(taskDiv);
 
 					var taskName = document.createElement("h3");
 					taskName.innerText = tasks.tasks[i].display;
@@ -63,6 +88,17 @@ function Ready() {
 					taskValue.innerText = "Value: " + tasks.tasks[i].value + " points";
 					taskDiv.appendChild(taskValue);
 				}
+
+				var removeButton = document.createElement("button");
+				removeButton.className = "button";
+				removeButton.innerText = "Clear Tasks";
+
+				removeButton.addEventListener("click", () => {
+					RemoveTask(date);
+				})
+
+				document.body.appendChild(removeButton);
+				dynamicElements.push(removeButton);
 			})
 			.catch(error => {
 				console.error("Error:", error);
