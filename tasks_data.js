@@ -86,4 +86,12 @@ tasks["Clean the house"] = {
 	}
 };
 
+tasks["Developing"] = {
+	display: "Developing",
+	value: 10,
+	img: "img/developing.png",
+	
+	custom: {}
+}
+
 export { tasks };
