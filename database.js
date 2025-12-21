@@ -73,6 +73,7 @@ function Ready() {
 					document.body.removeChild(dynamicElements[i]);
 
 				dynamicElements = [];
+				var points = 0;
 
 				for (var i = 0; i < tasks.tasks.length; i++) {
 					var taskDiv = document.createElement("div");
@@ -87,7 +88,20 @@ function Ready() {
 					var taskValue = document.createElement("span");
 					taskValue.innerText = "Value: " + tasks.tasks[i].value + " points";
 					taskDiv.appendChild(taskValue);
+
+					points += tasks.tasks[i].value;
 				}
+
+				var pointsDiv = document.createElement("div");
+				pointsDiv.className = "points-container";
+				document.body.appendChild(pointsDiv);
+				dynamicElements.push(pointsDiv);
+
+				var totalPoints = document.createElement("span");
+				totalPoints.style.fontWeight = "bold";
+				totalPoints.style.fontSize = "1.2em";
+				totalPoints.innerText = "Total points: " + points;
+				pointsDiv.appendChild(totalPoints);
 
 				var removeButton = document.createElement("button");
 				removeButton.className = "button";

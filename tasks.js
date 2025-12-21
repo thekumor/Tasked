@@ -167,7 +167,7 @@ function FillCard(parent, key, task, starValue) {
 
 			if (customTaskName && !tasks[customKey]) {
 				tasks[customKey] = {
-					display: task.display + " " + customTaskName,
+					display: task.display + ": " + customTaskName,
 					value: task.value,
 					img: task.img
 				};

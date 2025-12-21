@@ -48,6 +48,15 @@ a {
 	width: 50%;
 }
 
+.points-container {
+	background-color: rgb(66, 62, 102);
+	border: 3px solid black;
+	margin: 0 auto;
+	margin-bottom: 3vh;
+	padding: 1vh;
+	width: 40%;
+}
+
 .footer {
 	background-color: rgb(58, 58, 58);
 	border-top: 2px solid black;
