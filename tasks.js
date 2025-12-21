@@ -1,8 +1,13 @@
 // ================================================
 // 
-//	Script: tasks.js
-//	Handles task display and interaction.
-//	by The Kumor
+//	Project: Tasked
+//
+//	File: tasks.js
+//	Desc: Controls task selecting and saving them
+//	to the database.
+// 
+//	Date: 2025/12/21 7:55 PM
+//	Authors: The Kumor
 // 
 // ================================================
 

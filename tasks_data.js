@@ -1,8 +1,13 @@
 // ================================================
 // 
-//	Script: tasks_data.js
-//	Contains all data about tasks and their values.
-//	by The Kumor
+//	Project: Tasked
+//
+//	File: tasks_data.js
+//	Desc: Contains every task along with it's
+//	config.
+// 
+//	Date: 2025/12/21 7:55 PM
+//	Authors: The Kumor
 // 
 // ================================================
 

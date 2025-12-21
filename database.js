@@ -1,8 +1,13 @@
 // ================================================
 // 
-//	Script: database.js
-//	Reads tasks from the database and displays them.
-//	by The Kumor
+//	Project: Tasked
+//
+//	File: database.js
+//	Desc: Database view, gets each task so they
+//	can be viewed/cleared.
+// 
+//	Date: 2025/12/21 7:55 PM
+//	Authors: The Kumor
 // 
 // ================================================
 

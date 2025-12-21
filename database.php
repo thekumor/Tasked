@@ -1,9 +1,13 @@
 <?php
 // ================================================
 // 
-//	Script: database.php
-//	Saves and reads task data into a database.
-//	by The Kumor
+//	Project: Tasked
+//
+//	File: database.php
+//	Desc: Controls database responses from client.
+// 
+//	Date: 2025/12/21 7:57 PM
+//	Authors: The Kumor
 // 
 // ================================================
 

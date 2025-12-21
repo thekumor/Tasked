@@ -1,12 +1,17 @@
-<!--------------------------------------------------
+<!DOCTYPE html>
+<!-- ================================================
 -- 
 --	Project: Tasked
---	Task management/gamification system.
---	by The Kumor
+--
+--	File: index.php
+--	Desc: Entry point (tasks section). Tasks get
+--	displayed here so that user can select them.
+--
+--	Date: 2025/12/21 8:00 PM
+--	Authors: The Kumor
 -- 
----------------------------------------------------->
+-- ================================================ -->
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Tasked</title>
