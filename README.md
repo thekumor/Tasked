@@ -18,7 +18,7 @@ performed during that date.
 
 ## Target Audience
 - Students and professionals seeking quantifiable feedback on their daily work output.
-- Individuals who want a straightforward method to track and improve personal productivity.
+- People who want a straightforward method to track and improve productivity.
 - Habit-builders and self-improvement enthusiasts who benefit from data-driven reflection.
 - People interested in monitoring long-term patterns and optimizing time-management strategies.
 - Developers or researchers exploring quantified-self tools and productivity analytics.
