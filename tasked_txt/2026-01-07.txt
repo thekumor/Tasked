@@ -1,1 +1,0 @@
-[{"display":"Drink coffee","value":5,"img":"img/coffee.png"},{"display":"Walk the dog","value":7,"img":"img/dog.png"}]
