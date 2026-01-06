@@ -1,0 +1,1 @@
+[{"display":"Developing: Yuki","value":10,"img":"img/developing.png"},{"display":"Developing: Coffee machine","value":10,"img":"img/developing.png"},{"display":"Go fishing","value":3,"img":"img/fish.png"},{"display":"Drink coffee","value":5,"img":"img/coffee.png"}]

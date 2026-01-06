@@ -6,7 +6,7 @@
 //	Desc: Database view, gets each task so they
 //	can be viewed/cleared.
 // 
-//	Date: 2025/12/21 7:55 PM
+//	Modified: 2026/01/06 9:21 AM
 //	Authors: The Kumor
 // 
 // ================================================
@@ -71,8 +71,9 @@ function Ready() {
 		})
 			.then(response => response.text())
 			.then(data => {
-				var tasks = JSON.parse(data);
-				tasks.tasks = JSON.parse(tasks.tasks);
+				// Has to be done twice because it's overstringified string.
+				// If done once, returns a JSON string.
+				var tasks = JSON.parse(JSON.parse(data));
 
 				for (var i = 0; i < dynamicElements.length; i++)
 					document.body.removeChild(dynamicElements[i]);
@@ -80,21 +81,21 @@ function Ready() {
 				dynamicElements = [];
 				var points = 0;
 
-				for (var i = 0; i < tasks.tasks.length; i++) {
+				for (var i = 0; i < tasks.length; i++) {
 					var taskDiv = document.createElement("div");
 					taskDiv.className = "task-container";
 					document.body.appendChild(taskDiv);
 					dynamicElements.push(taskDiv);
 
 					var taskName = document.createElement("h3");
-					taskName.innerText = tasks.tasks[i].display;
+					taskName.innerText = tasks[i].display;
 					taskDiv.appendChild(taskName);
 
 					var taskValue = document.createElement("span");
-					taskValue.innerText = "Value: " + tasks.tasks[i].value + " points";
+					taskValue.innerText = "Value: " + tasks[i].value + " points";
 					taskDiv.appendChild(taskValue);
 
-					points += tasks.tasks[i].value;
+					points += tasks[i].value;
 				}
 
 				var pointsDiv = document.createElement("div");
@@ -145,7 +146,7 @@ function Ready() {
 			var optionsAvailable = [];
 
 			for (var i = 0; i < dates.length; i++)
-				optionsAvailable.push(dates[i].date);
+				optionsAvailable.push(dates[i]);
 
 			for (var i = optionsAvailable.length - 1; i >= 0; i--) {
 				var option = document.createElement("option");

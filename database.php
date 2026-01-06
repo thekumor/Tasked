@@ -6,7 +6,7 @@
 //	File: database.php
 //	Desc: Controls database responses from client.
 // 
-//	Date: 2025/12/21 7:57 PM
+//	Modified: 2026/01/06 9:10 AM
 //	Authors: The Kumor
 // 
 // ================================================
@@ -14,12 +14,9 @@
 if (!isset($_POST["date"]) || !isset($_POST["tasks"]) || !isset($_POST["action"]))
 	die("Invalid request.");
 
-$config["host"] = "localhost";
-$config["user"] = "root";
-$config["pass"] = "";
-$config["name"] = "tasked";
+$config["name"] = "tasked_txt";
 
-CreateDatabaseIfNotExists();
+CreateFolderIfNotExists();
 
 $callbacks = [
 	"save" => function () {
@@ -51,157 +48,75 @@ if (array_key_exists($_POST["action"], $callbacks)) {
 	die("Invalid action.");
 }
 
-function Connect()
+function CreateFolderIfNotExists()
 {
 	global $config;
 
-	$mysqli = new mysqli(
-		$config["host"],
-		$config["user"],
-		$config["pass"],
-		$config["name"]
-	);
-
-	if ($mysqli->connect_errno)
-		die("Failed to connect to database (" . $mysqli->connect_error . ")");
-
-	return $mysqli;
-}
-
-function CreateTableIfNotExists($mysqli)
-{
-	global $config;
-
-	$mysqli->query("USE " . $config["name"] . ";");
-	$mysqli->query("CREATE TABLE IF NOT EXISTS day(`date` DATE, tasks TEXT);");
-}
-
-function CreateDatabaseIfNotExists()
-{
-	global $config;
-
-	$mysqli = new mysqli(
-		$config["host"],
-		$config["user"],
-		$config["pass"],
-	);
-
-	if ($mysqli->connect_errno)
-		die("Failed to connect to database (" . $mysqli->connect_error . ")");
-
-	$mysqli->query("CREATE DATABASE IF NOT EXISTS " . $config["name"] . ";");
-	CreateTableIfNotExists($mysqli);
-
-	$mysqli->close();
+	if (!file_exists($config['name']))
+		mkdir($config['name']);
 }
 
 function SaveTasks($date, $tasks)
 {
-	$mysqli = Connect();
+	global $config;
 
-	CreateTableIfNotExists($mysqli);
-
-	$stmt = $mysqli->prepare("
-		INSERT INTO day(date, tasks)
-		VALUES(?, ?);
-	");
-	$stmt->bind_param(
-		"ss",
-		$date,
-		$tasks
-	);
-	$stmt->execute();
-	$stmt->close();
-
-	$mysqli->close();
+	$file = fopen($config['name'] . '/' . $date . ".txt", "w");
+	fwrite($file, $tasks);
+	fclose($file);
 }
 
 function DeleteTasks($date)
 {
-	$mysqli = Connect();
+	global $config;
 
-	$stmt = $mysqli->prepare("
-		DELETE FROM day
-		WHERE date = ?;
-	");
-	$stmt->bind_param(
-		"s",
-		$date
-	);
-	$stmt->execute();
-	$stmt->close();
-
-	$mysqli->close();
+	$filePath = $config['name'] . '/' . $date . ".txt";
+	if (file_exists($filePath)) {
+		unlink($filePath);
+	}
 }
 
 function UpdateTasks($date, $tasks)
 {
-	$mysqli = Connect();
-
-	$stmt = $mysqli->prepare("
-		UPDATE day
-		SET tasks = ?
-		WHERE date = ?;
-	");
-	$stmt->bind_param(
-		"ss",
-		$tasks,
-		$date
-	);
-	$stmt->execute();
-	$stmt->close();
-
-	$mysqli->close();
+	SaveTasks($date, $tasks);
 }
 
 function GetTasks($date)
 {
-	$mysqli = Connect();
+	global $config;
+	$filePath = $config['name'] . '/' . $date . ".txt";
 	$task = null;
 
-	CreateTableIfNotExists($mysqli);
-
-	$stmt = $mysqli->prepare("
-		SELECT * FROM day
-		WHERE date = ?;
-	");
-	$stmt->bind_param(
-		"s",
-		$date
-	);
-	$stmt->execute();
-	$result = $stmt->get_result();
-
-	if ($row = $result->fetch_assoc()) {
-		$task = $row;
+	if (file_exists($filePath)) {
+		$file = fopen($filePath, "r");
+		$task = fread($file, filesize($filePath));
+		fclose($file);
 	}
-
-	$stmt->close();
-
-	$mysqli->close();
 
 	return $task;
 }
 
 function GetAllTasks($justDates = false)
 {
-	$mysqli = Connect();
+	global $config;
+
+	$files = scandir($config['name']);
 	$tasks = array();
 
-	CreateTableIfNotExists($mysqli);
+	foreach ($files as $file) {
+		if ($file === '.' || $file === '..') {
+			continue;
+		}
 
-	$query = $justDates ? "SELECT date FROM day" : "SELECT * FROM day";
-	$stmt = $mysqli->prepare($query);
-	$stmt->execute();
-	$result = $stmt->get_result();
+		$date = $file;
+		$date = str_replace(".txt", "", $date);
 
-	while ($row = $result->fetch_assoc()) {
-		$tasks[] = $row;
+		if ($justDates) {
+			$tasks[] = $date;
+		} else {
+			$taskContent = GetTasks($date);
+			$tasks[] = array("date" => $date, "tasks" => $taskContent);
+		}
 	}
-
-	$stmt->close();
-
-	$mysqli->close();
 
 	return $tasks;
 }
